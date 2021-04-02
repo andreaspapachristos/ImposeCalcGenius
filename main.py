@@ -2,10 +2,11 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import csv, glob, re
-convertor = 0.3527777778
+#0.3527777778
+import csv, glob, re, math
+convertor = 0.352777777
 style = ("sheetwise", "worknturn", "workntumble", "single_sided", "perfector")
-ptTomm = lambda x: int(x * convertor)
+ptTomm = lambda x: math.ceil(x * convertor)
 
 
 def readTplFile(path):
@@ -19,7 +20,7 @@ def writeCsv(path):
             fileWriter.writerow(["width", "Height", "Style", "pages", "pageWidth", "pageHeight"])
             for file in glob.glob("/run/media/master/Transcend/Templates/EPIPEDES/" + "**/*tpl", recursive=True):
                 x = readTplFile(file)
-                fileWriter.writerow([float(x[0])*convertor, float(x[1])*convertor, style[int(x[4])]])
+                fileWriter.writerow([ptTomm(float(x[0])), ptTomm(float(x[1])), style[int(x[4])]])
     except UnicodeDecodeError:
         print(file)
     except IndexError:
@@ -40,4 +41,4 @@ def regTest(path):
 
 if __name__ == '__main__':
     regTest("/run/media/master/Transcend/Templates/EPIPEDES/man roland 708/61x86_S-S_290x400_s8_Head15mm.tpl")
-    #writeCsv("/home/master/base.csv")
+    writeCsv("/home/master/base1.csv")
