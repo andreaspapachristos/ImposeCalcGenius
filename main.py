@@ -4,6 +4,8 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 # real convertor 0.3527777778
 import csv, glob, re, math
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
 convertor = 0.3527777
 style = ("sheetwise", "worknturn", "workntumble", "single_sided", "perfector")
 ptTomm = lambda x: math.ceil(float("{:.4f}".format(x)) * convertor)
@@ -47,7 +49,15 @@ def regTest(path):
         else: var.append(0)
         #print(var)
     return var
-
+def aiFind():
+    data = pd.read_csv("/home/master/templates.csv")
+    X = data.drop(columns=["width", "Height", "Style"])
+    y = data["width"]
+    model = DecisionTreeClassifier()
+    model.fit(X, y)
+    pre = model.predict([[140, 200, 16]])
+    print(pre)
 if __name__ == '__main__':
     #regTest("/run/media/master/Transcend/Templates/PERIODIKA/EBDOMADIAIA/KARFITSA/bhmagazino_208x280_karfitsa_k4.tpl")
-    writeCsv("/home/master/jobs.csv")
+    #writeCsv("/home/master/jobs.csv")
+    aiFind()
