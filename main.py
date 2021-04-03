@@ -4,7 +4,7 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 #0.3527777778
 import csv, glob, re, math
-convertor = 0.3527777778
+convertor = 0.3527777
 style = ("sheetwise", "worknturn", "workntumble", "single_sided", "perfector")
 ptTomm = lambda x: math.ceil(float("{:.4f}".format(x)) * convertor)
 
@@ -30,14 +30,17 @@ def writeCsv(path):
 
 def regTest(path):
     pattern1 = "%SSiPressSheet: (\d{4}.\d{5} ){2}\d\.\d{5} \d{2,5}\.\d{5} \d"
-    patterns = ["%SSiSignature: .+[\r\n]+([^\r\n]+)","%SSiSignature: .+[\r\n]%SSiPressSheet: \d{2,4}.\d{1,5} \d{2,4}.\d{1,5} \d{1,4}.\d{1,5} \d{1,4}.\d{1,5} ([01234])", "(?<=%SSiPrshMatrix: 8) [\d]{2,5}.\d{2,5}", "%SSiSignature: .+[\r\n]%SSiPressSheet: (\d{2,4}.\d{1,5}) (\d{2,4}.\d{1,5})",  "(?<=%SSiPrshMatrix: 9) [\d]{2,5}.\d{2,5}", "(?<=%SSiPrshMatrix: 1 )[\d]{1,2}"]
+    patterns11 = ["%SSiSignature: .+[\r\n]+([^\r\n]+)","%SSiSignature: .+[\r\n]%SSiPressSheet: \d{2,4}.\d{1,5} \d{2,4}.\d{1,5} \d{1,4}.\d{1,5} \d{1,4}.\d{1,5} ([01234])", "(?<=%SSiPrshMatrix: 8) [\d]{2,5}.\d{2,5}", "%SSiSignature: .+[\r\n]%SSiPressSheet: (\d{2,4}.\d{1,5}) (\d{2,4}.\d{1,5})",  "(?<=%SSiPrshMatrix: 9) [\d]{2,5}.\d{2,5}", "(?<=%SSiPrshMatrix: 1 )[\d]{1,2}"]
+    patterns = ["%SSiSignature: .+[\r\n]%SSiPressSheet: (\d{2,4}.\d{1,5})", "%SSiSignature: .+[\r\n]%SSiPressSheet: \d{2,4}.\d{1,5} (\d{2,4}.\d{1,5})", "%SSiSignature: .+[\r\n]%SSiPressSheet: \d{2,4}.\d{1,5} \d{2,4}.\d{1,5} \d{1,4}.\d{1,5} \d{1,4}.\d{1,5} ([01234])", "(?<=%SSiPrshMatrix: 8) [\d]{2,5}.\d{2,5}", "(?<=%SSiPrshMatrix: 9) [\d]{2,5}.\d{2,5}" ]
     with open(path, "r") as f:
-        pattern = re.compile(r'(?<=%SSiPrshMatrix: 8) [\d]{2,5}.\d{2,5}')
         ff = f.read()
-        matches = pattern.findall(ff)
-        print(int(ptTomm(float(matches[0]))))
+        for pattern in patterns:
+            pattern123 = re.compile(pattern)
+
+            matches = pattern123.findall(ff)
+            print(int(ptTomm(float(matches[0]))))
 
 
 if __name__ == '__main__':
-    regTest("/home/master/Downloads/test/Tzouvaras Kokino xali Soma 70x100.job")
+    regTest("/home/master/Downloads/test/Dubois soma 272sel 14x21 4-1-21 58x86.job")
     #writeCsv("/home/master/base1.csv")
