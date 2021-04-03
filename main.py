@@ -2,7 +2,7 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-#0.3527777778
+# real convertor 0.3527777778
 import csv, glob, re, math
 convertor = 0.3527777
 style = ("sheetwise", "worknturn", "workntumble", "single_sided", "perfector")
@@ -17,10 +17,10 @@ def writeCsv(path):
     try:
         with open(path, "w") as f:
             fileWriter = csv.writer(f, delimiter=",", quotechar="|", quoting=csv.QUOTE_MINIMAL)
-            fileWriter.writerow(["width", "Height", "Style", "pages", "pageWidth", "pageHeight"])
-            for file in glob.glob("/run/media/master/Transcend/Templates/EPIPEDES/" + "**/*tpl", recursive=True):
-                x = readTplFile(file)
-                fileWriter.writerow([ptTomm(float(x[0])), ptTomm(float(x[1])), style[int(x[4])]])
+            fileWriter.writerow(["width", "Height", "Style", "pageWidth", "pageHeight", "pages"])
+            for file in glob.glob("/home/master/Downloads/test/" + "**/*job", recursive=True):
+                x = regTest(file)
+                fileWriter.writerow([x[0], x[1], style[x[2]], x[3], x[4], x[5]])
     except UnicodeDecodeError:
         print(file)
     except IndexError:
@@ -38,12 +38,16 @@ def regTest(path):
         for pattern in patterns:
             pattern123 = re.compile(pattern)
             matches = pattern123.findall(ff)
-            var.append(int(ptTomm(float(matches[0]))))
+            if matches:
+                var.append(int(ptTomm(float(matches[0]))))
+            else: var.append(0)
         pages = (re.findall("(?<=%SSiPrshMatrix: 1) [\d]{1,2}", ff))
-        var.append(int(pages[0]))
-        print(var)
+        if pages:
+            var.append(int(pages[0]))
+        else: var.append(0)
+        #print(var)
     return var
 
 if __name__ == '__main__':
-    regTest("/home/master/Downloads/test/Siourtis 168x162 70x100.job")
-    #writeCsv("/home/master/base1.csv")
+    #regTest("/run/media/master/Transcend/Templates/PERIODIKA/EBDOMADIAIA/KARFITSA/bhmagazino_208x280_karfitsa_k4.tpl")
+    writeCsv("/home/master/jobs.csv")
