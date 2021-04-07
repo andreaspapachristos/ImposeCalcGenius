@@ -6,6 +6,8 @@
 import csv, glob, re, math
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 convertor = 0.3527777
 style = ("sheetwise", "worknturn", "workntumble", "single_sided", "perfector")
 ptTomm = lambda x: math.ceil(float("{:.4f}".format(x)) * convertor)
@@ -42,7 +44,7 @@ def regTest(path):
             matches = pattern123.findall(ff)
             if matches:
                 var.append(int(ptTomm(float(matches[0]))))
-            else: var.append(0)
+            else: break
         pages = (re.findall("(?<=%SSiPrshMatrix: 1) [\d]{1,2}", ff))
         if pages:
             var.append(int(pages[0]))
@@ -51,13 +53,14 @@ def regTest(path):
     return var
 def aiFind():
     data = pd.read_csv("/home/master/templates.csv")
-    X = data.drop(columns=["width", "Height", "Style"])
-    y = data["width"]
+    X = data.drop(columns=["pages", "Style", "width", "Height"])
+    y = data["width"]  #.drop(columns=["width", "Height", "pages", "Style", "pageHeight"])
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
     model = DecisionTreeClassifier()
-    model.fit(X, y)
-    pre = model.predict([[140, 200, 16]])
-    print(pre)
+    model.fit(X_train, y_train)
+    pre = model.predict(X_test)
+    print(accuracy_score(y_test, pre))
 if __name__ == '__main__':
     #regTest("/run/media/master/Transcend/Templates/PERIODIKA/EBDOMADIAIA/KARFITSA/bhmagazino_208x280_karfitsa_k4.tpl")
-    #writeCsv("/home/master/jobs.csv")
+    #writeCsv("/home/master/jobsnew.csv")
     aiFind()
